@@ -1,5 +1,4 @@
-import { useContext, useState } from 'react';
-import * as pokeApi from '@/lib/pokeApi/pokemon';
+import { useContext, useState, type Dispatch, type SetStateAction } from 'react';
 import { PokemonsContext } from '@/contexts/PokemonsContext';
 import { Container, Box, Button, Flex } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
@@ -8,9 +7,11 @@ import StartScreen from './StartScreen';
 import PlayingScreen from './PlayingScreen';
 import WonScreen from './WonScreen';
 
-export default function PokeGame({ isVisible }) {
+import { type PokemonListItem } from '@/contexts/PokemonsContext';
+
+export default function PokeGame({ isVisible }: { isVisible: boolean }) {
     const [randomPokemon, setRandomPokemon] =
-        useState<pokeApi.Pokemon>();
+        useState<PokemonListItem>();
 
     const [pokemonInput, setPokemonInput] = useState<string>("");
     const [gameWon, setGameWon] = useState(false);
@@ -77,17 +78,15 @@ export default function PokeGame({ isVisible }) {
     );
 }
 
-
-// interface GameContentProps {
-//     pokemon?: pokeApi.Pokemon;
-//     gameWon: boolean;
-//     attempts: number;
-//     pokemonInput: string;
-
-//     setPokemonInput: React.Dispatch<React.SetStateAction<string>>;
-//     setGameWon: React.Dispatch<React.SetStateAction<boolean>>;
-//     setAttempts: React.Dispatch<React.SetStateAction<number>>;
-// }
+interface PokeGameContentProps {
+    pokemon: PokemonListItem | undefined;
+    gameWon: boolean;
+    attempts: number;
+    pokemonInput: string;
+    setPokemonInput: Dispatch<SetStateAction<string>>;
+    setGameWon: Dispatch<SetStateAction<boolean>>;
+    setAttempts: Dispatch<SetStateAction<number>>;
+}
 
 function PokeGameContent({
     pokemon,
@@ -97,7 +96,7 @@ function PokeGameContent({
     setPokemonInput,
     setGameWon,
     setAttempts,
-}) {
+}: PokeGameContentProps) {
 
     if (!pokemon) {
         return <StartScreen />;

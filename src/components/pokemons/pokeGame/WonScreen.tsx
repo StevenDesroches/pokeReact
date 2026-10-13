@@ -1,9 +1,9 @@
-import * as pokeApi from '@/lib/pokeApi/pokemon';
+import { type PokemonListItem } from '@/contexts/PokemonsContext';
 import { AspectRatio, Box, Image, Text } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 
 interface Props {
-    pokemon: pokeApi.Pokemon;
+    pokemon: PokemonListItem;
 }
 
 export default function WonScreen({ pokemon }: Props) {

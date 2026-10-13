@@ -1,14 +1,14 @@
 import { createContext, useEffect, useState } from "react";
 // import * as pokeApi from "../lib/pokeApi/pokemon";
 import { usePokemons } from '@/queries/pokemon';
-import {getIdFromUrl} from '@/utils/generic';
+import { getIdFromUrl } from '@/utils/generic';
 
 
 export interface PokemonListItem {
   id: number;
   name: string;
   sprites: {
-    front_default: string;
+    front_default: string | null;
   };
   species: {
     url: string;

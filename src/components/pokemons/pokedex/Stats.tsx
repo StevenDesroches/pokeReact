@@ -1,7 +1,7 @@
 import { Slider, Text, Group, Table, Title, Box } from '@mantine/core';
+import type * as pokeApi from '@/lib/pokeApi/pokemon';
 
-
-export default function Pokemon({ pokemon }) {
+export default function Pokemon({ pokemon }: { pokemon: pokeApi.Pokemon }) {
 
     let totalStat = pokemon.stats.reduce((accumulator, stat) => accumulator + stat.base_stat, 0);
 

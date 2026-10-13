@@ -1,4 +1,4 @@
-import * as pokeApi from '@/lib/pokeApi/pokemon';
+import { type PokemonListItem } from '@/contexts/PokemonsContext';
 // import { Box, Text } from '@mantine/core';
 
 import StartScreen from './StartScreen';
@@ -6,7 +6,7 @@ import PlayingScreen from './PlayingScreen';
 import WonScreen from './WonScreen';
 
 interface GameContentProps {
-    pokemon?: pokeApi.Pokemon;
+    pokemon?: PokemonListItem;
     gameWon: boolean;
     attempts: number;
     pokemonInput: string;

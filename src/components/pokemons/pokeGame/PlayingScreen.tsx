@@ -1,4 +1,4 @@
-import * as pokeApi from '@/lib/pokeApi/pokemon';
+import { type PokemonListItem } from '@/contexts/PokemonsContext';
 import {
     AspectRatio,
     Box,
@@ -10,7 +10,7 @@ import {
 import { useTranslation } from 'react-i18next';
 
 interface Props {
-    pokemon: pokeApi.Pokemon;
+    pokemon: PokemonListItem;
     attempts: number;
     pokemonInput: string;
 
@@ -31,8 +31,9 @@ export default function PlayingScreen({
     const { i18n, t } = useTranslation();
 
     function isPokemonValid() {
-        const pokemonName =
-            pokemon.allNames[i18n.language].toLocaleLowerCase();
+        let pokemonName = pokemon.name;
+        if (pokemon.allNames && pokemon.allNames[i18n.language])
+            pokemonName = pokemon.allNames[i18n.language].toLocaleLowerCase();
 
         if (pokemonInput.toLocaleLowerCase() === pokemonName) {
             setGameWon(true);

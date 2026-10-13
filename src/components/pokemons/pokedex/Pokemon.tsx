@@ -5,27 +5,23 @@ import { useTranslation } from "react-i18next";
 
 import { useSpecies, useStat, useTypes } from '@/queries/pokemon';
 import { getIdFromUrl, capitalizeWords } from '@/utils/generic';
+import type * as pokeApi from '@/lib/pokeApi/pokemon';
 
 
 
+interface PokemonProps {
+    pokemon: pokeApi.Pokemon | undefined;
+    isLoading: boolean;
+    error: Error | null;
+}
 
-export default function Pokemon({ pokemon, isLoading, error, }) {
+export default function Pokemon({ pokemon, isLoading, error, }: PokemonProps) {
     const { t } = useTranslation();
 
-    // if (!pokemon || !pokemon.name)
-    //     return <></>
-
-    // if (isLoading) return <PokemonLoading />;
-    // if (!pokemon) return <div>No Pokémon selected</div>;
-    // if (isLoading) return <div>Is loading...</div>;
-    // if (error) return <div>Error: {error.message}</div>;
-
-    let isReady = !isLoading && !error && pokemon && pokemon.name
-    if (!isReady)
+    if(isLoading || error || !pokemon || !pokemon.name)
         return <></>;
 
     let totalStat = pokemon.stats.reduce((accumulator, stat) => accumulator + stat.base_stat, 0);
-    // console.log('pokemon', pokemon);
 
     return (
         <Container key={pokemon.id} className="glass-panel" h="100%">
@@ -73,31 +69,47 @@ export default function Pokemon({ pokemon, isLoading, error, }) {
     )
 }
 
-export function PokemonTitle({ pokemon }) {
+interface PokemonTitleProps {
+    pokemon: pokeApi.Pokemon;
+}
+export function PokemonTitle({ pokemon }: PokemonTitleProps) {
     let specieId = getIdFromUrl(pokemon.species.url);
+    if (!specieId)
+        specieId = 0;
     const { i18n } = useTranslation();
 
     const { data: specieDetail, isLoading, error } = useSpecies(specieId, i18n.language);
 
-    if (isLoading || error)
+    if (isLoading || error || !specieDetail)
         return <Title order={2}>{capitalizeWords(pokemon.name)}</Title>
     return <Title order={2}>{specieDetail.translatedName}</Title>
 
 }
 
-export function StatHeadCell({ stat }) {
+interface StatHeadCellProps {
+    stat: pokeApi.Pokemon['stats'][number]['stat'];
+}
+export function StatHeadCell({ stat }: StatHeadCellProps) {
     let statId = getIdFromUrl(stat.url);
+    if (!statId)
+        statId = 0;
     const { i18n } = useTranslation();
 
     const { data: statDetail, isLoading, error } = useStat(statId, i18n.language);
 
-    if (isLoading || error)
+    if (isLoading || error || !statDetail)
         return <Skeleton height={8} radius="xl" />
     return <Table.Th>{statDetail.translatedName}</Table.Th>
 }
 
-export function StatSlider({ stat, totalStat }) {
+interface StatSliderProps {
+    stat: pokeApi.Pokemon['stats'][number];
+    totalStat: number;
+}
+export function StatSlider({ stat, totalStat }: StatSliderProps) {
     let statId = getIdFromUrl(stat.stat.url);
+    if (!statId)
+        statId = 0;
     const { i18n } = useTranslation();
 
     const { data: statDetail, isLoading, error } = useStat(statId, i18n.language);
@@ -123,7 +135,7 @@ export function StatSlider({ stat, totalStat }) {
             break;
     }
 
-    if (isLoading || error)
+    if (isLoading || error || !statDetail)
         return <Skeleton height={8} radius="xl" />
     return <Group>
         <Slider key={stat.stat.name} defaultValue={(stat.base_stat / totalStat) * 100} min={0} max={100} styles={{ thumb: { display: 'none', }, }} style={{ pointerEvents: 'none' }} w="50%" color={statColor} />
@@ -131,14 +143,22 @@ export function StatSlider({ stat, totalStat }) {
     </Group>
 }
 
-export function TypeBadge({ type }) {
+
+interface TypeBadgeProps {
+    type: pokeApi.Pokemon['types'][number]['type'];
+}
+export function TypeBadge({ type }: TypeBadgeProps) {
     let typeId = getIdFromUrl(type.url);
+    if (!typeId)
+        typeId = 0;
+
     const { i18n } = useTranslation();
 
     const { data: typeDetail, isLoading, error } = useTypes(typeId, i18n.language);
 
-    let typeColor;
+    let typeColor: string;
     switch (typeId) {
+        default:
         case 1://normal
             typeColor = "#aab09f";
             break;
@@ -198,10 +218,9 @@ export function TypeBadge({ type }) {
             break;
     }
 
-    if (isLoading || error)
+    if (isLoading || error || !typeDetail)
         return <Pill style={{ backgroundColor: typeColor }} radius="xs">{capitalizeWords(type.name)}</Pill>
     return <Pill style={{ backgroundColor: typeColor }} radius="xs">{typeDetail.translatedName}</Pill>
-    // return <Table.Th>{typeDetail.translatedName}</Table.Th>
 }
 
 export function PokemonLoading() {

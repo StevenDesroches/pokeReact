@@ -9,6 +9,6 @@ export function getIdFromUrl(url: string): number | null {
     return Number.isNaN(parsed) ? null : parsed;
 }
 
-export function capitalizeWords(sentence) {
-    return sentence.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+export function capitalizeWords(sentence: string) {
+    return sentence.split(' ').map((word: string) => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
 }

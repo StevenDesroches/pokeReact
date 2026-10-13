@@ -14,10 +14,12 @@ import { capitalizeWords } from '@/utils/generic';
 
 
 
-
-export default function Pokedex({ isVisible }) {
-    const [displayedPokemonIds, setDisplayedPokemonIds] = useState([]);
-    const [pokemonId, setPokemonId] = useState(null);
+type PokedexProps = {
+    isVisible: boolean;
+};
+export default function Pokedex({ isVisible }: PokedexProps) {
+    const [displayedPokemonIds, setDisplayedPokemonIds] = useState<number[]>([]);
+    const [pokemonId, setPokemonId] = useState<number>(1);
 
     useEffect(() => {
         if (pokemonId === null && displayedPokemonIds.length > 0) {
@@ -42,7 +44,12 @@ export default function Pokedex({ isVisible }) {
     </>
 }
 
-export function SearchBar({ setDisplayedPokemonIds }) {
+type SearchBarProps = {
+    setDisplayedPokemonIds: React.Dispatch<
+        React.SetStateAction<number[]>
+    >;
+};
+export function SearchBar({ setDisplayedPokemonIds }: SearchBarProps) {
     const [query, setQuery] = useState("");
 
     const { i18n, t } = useTranslation();
@@ -56,13 +63,10 @@ export function SearchBar({ setDisplayedPokemonIds }) {
                 let displayName = pokemon.name;
                 if (pokemon.allNames && pokemon.allNames[i18n.language])
                     displayName = pokemon.allNames[i18n.language];
-                // const allNames = pokemon.allNames ?? [];
 
                 const matchDisplayName = displayName.toLowerCase().includes(q);
-                // const matchAllNames = allNames.some((n) => n.toLowerCase().includes(q));
 
                 return matchDisplayName;
-                // return matchDisplayName || matchAllNames;
             });
             setDisplayedPokemonIds(pokemonsFound.map((p) => p.id));
         } else {
@@ -75,8 +79,13 @@ export function SearchBar({ setDisplayedPokemonIds }) {
     return <TextInput placeholder={t("search")} mb=".5vh" radius="xs" value={query} onChange={(e) => setQuery(e.target.value)} />
 }
 
-
-export function List({ displayedPokemonIds, setPokemonId }) {
+type ListProps = {
+    displayedPokemonIds: number[];
+    setPokemonId: React.Dispatch<
+        React.SetStateAction<number>
+    >;
+};
+export function List({ displayedPokemonIds, setPokemonId }: ListProps) {
     const pokemons = useContext(PokemonsContext);
     const scrollRef = useRef(null);
 
@@ -103,17 +112,12 @@ export function List({ displayedPokemonIds, setPokemonId }) {
                 {
                     virtualItems.map(virtualItem => {
                         const pokemon = displayedPokemons[virtualItem.index];
-                        // return <PokedexButton pokemon={pokemon} setPokemonId={setPokemonId} virtualItem={virtualItem}></PokedexButton>
-
-                        // console.log(pokemon.translatedName);
-                        // console.log(pokemon);
-
 
                         let pokemonName = capitalizeWords(pokemon.name);
                         if (pokemon.allNames && pokemon.allNames[i18n.language])
                             pokemonName = pokemon.allNames[i18n.language];
 
-                        return <Button key={virtualItem.key} rightSection={<img src={pokemon.sprites.front_default} width={60} height={60} alt={pokemon.name} />} radius="xs" justify="space-between" variant="default" onClick={() => setPokemonId(pokemon.id)}
+                        return <Button key={virtualItem.key} rightSection={pokemon.sprites.front_default ? <img src={pokemon.sprites.front_default} width={60} height={60} alt={pokemon.name} /> : undefined} radius="xs" justify="space-between" variant="default" onClick={() => setPokemonId(pokemon.id)}
                             style={{
                                 position: "absolute",
                                 top: 0,

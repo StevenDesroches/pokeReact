@@ -1,0 +1,11 @@
+{
+  "Welcome to React": "Bienvenue à React et react-i18next",
+  "pokemon": "Pokémon",
+  "search": "Rechercher",
+  "Stats": "Statistiques",
+  "Types": "Types",
+  "Total": "Total",
+  "new game": "Nouvelle partie",
+  "send": "Envoyer",
+  "press new game to start": "Appuie sur nouvelle partie pour commencer"
+}

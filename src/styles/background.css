@@ -1,0 +1,36 @@
+body {
+  min-height: 100vh;
+  /* Ensures it covers full window height */
+  background-image: url('../assets/pokemonBG.jpg');
+  /* Relative path to your asset */
+  background-size: cover;
+  /* Resizes image to cover the entire space */
+  background-position: center;
+  /* Centers the image */
+  background-repeat: no-repeat;
+  /* Prevents tiling */
+  background-color: #f0f2f5;
+  /* Fallback background color if image fails to load */
+  backdrop-filter: blur(20px);
+}
+
+.glass-panel {
+  /* 1. Semi-transparent background color */
+  background: rgba(255, 255, 255, 0.50) !important;
+  background-color: rgba(255, 255, 255, 0.50) !important;
+
+  /* 2. The blur effect (Crucial for the glass look) */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  /* Safari support */
+
+  /* 3. Subtle light border to simulate glass edges */
+  border: 1px solid rgba(255, 255, 255, 0.50);
+
+  /* 4. Rounded corners & soft shadow for depth */
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.15);
+}
+
+.rounded-corner {
+  border-radius: 16px;
+}
